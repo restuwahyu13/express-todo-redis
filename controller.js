@@ -1,6 +1,7 @@
 const { setCreatePublisher, setResultPublisher } = require('./publisher')
 const { initCreateSubscriber, initResultsSubscriber, initResultSubscriber } = require('./subscriber')
 const { getResponseSubscriber } = require('./utils/util.message')
+const { toObject } = require('./utils/util.parse')
 
 exports.controller = {
 	async createController(req, res) {
@@ -36,7 +37,7 @@ exports.controller = {
 			method: req.method,
 			status: res.statusCode,
 			message: response.message,
-			todos: JSON.parse(response.data).todos
+			todos: toObject(response.data)
 		})
 	},
 	async resultController(req, res) {
@@ -55,7 +56,7 @@ exports.controller = {
 			method: req.method,
 			status: res.statusCode,
 			message: response.message,
-			todo: JSON.parse(response.data).todo
+			todo: toObject(response.data)
 		})
 	}
 }

@@ -22,62 +22,32 @@ class Subscriber {
 
 	async getString(keyName) {
 		const ioRedis = this._redisConnect()
-		ioRedis
-			.hkeys(keyName)
-			.then(async (res) => {
-				if (res) {
-					const response = await ioRedis.get(keyName)
-					await ioRedis.expire(keyName, 60)
-					if (response) {
-						return Promise.resolve(response)
-					}
-					return {}
-				}
-				return new Error('keys is not exist')
-			})
-			.catch((err) => {
-				return new Error(`Redis Internal Server Error: ${err}`)
-			})
+		const response = await ioRedis.get(keyName)
+		await ioRedis.expire(keyName, 60)
+		if (response) {
+			return Promise.resolve(response)
+		}
+		return {}
 	}
 
 	async getMap(keyName) {
 		const ioRedis = this._redisConnect()
-		ioRedis
-			.hkeys(keyName)
-			.then(async (res) => {
-				if (res) {
-					const response = await ioRedis.hgetall(keyName)
-					await ioRedis.expire(keyName, 60)
-					if (response) {
-						return Promise.resolve(response)
-					}
-					return {}
-				}
-				return new Error('keys is not exist')
-			})
-			.catch((err) => {
-				return new Error(`Redis Internal Server Error: ${err}`)
-			})
+		const response = await ioRedis.hgetall(keyName)
+		await ioRedis.expire(keyName, 60)
+		if (response) {
+			return Promise.resolve(response)
+		}
+		return {}
 	}
 
 	async getArray(keyName) {
 		const ioRedis = this._redisConnect()
-		ioRedis
-			.hkeys(keyName)
-			.then(async (res) => {
-				if (res) {
-					const response = await ioRedis.hgetall(keyName)
-					await ioRedis.expire(keyName, 60)
-					if (response) {
-						return Promise.resolve(JSON.parser(response).data)
-					}
-					return {}
-				}
-				return new Error('keys is not exist')
-			})
-			.catch((err) => {
-				return new Error(`Redis Internal Server Error: ${err}`)
-			})
+		const response = await ioRedis.hgetall(keyName)
+		await ioRedis.expire(keyName, 60)
+		if (response) {
+			return Promise.resolve(JSON.parser(response).data)
+		}
+		return {}
 	}
 
 	async getResponse() {

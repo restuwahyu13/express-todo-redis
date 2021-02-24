@@ -1,6 +1,7 @@
 const todoModel = require('./model')
 const { Subscriber } = require('./utils/util.subscriber')
 const { setResponsePublisher } = require('./utils/util.message')
+const { toJson } = require('./utils/util.parse')
 
 const createSubscriber = new Subscriber({ key: 'Create' })
 const resultSubscriber = new Subscriber({ key: 'Result' })
@@ -41,7 +42,7 @@ exports.initCreateSubscriber = async () => {
 
 exports.initResultsSubscriber = async () => {
 	try {
-		const resultsAllTodo = await todoModel.findOne({}).lean()
+		const resultsAllTodo = await todoModel.find({}).lean()
 
 		if (resultsAllTodo.length < 1) {
 			await setResponsePublisher({
@@ -52,7 +53,7 @@ exports.initResultsSubscriber = async () => {
 			await setResponsePublisher({
 				status: 200,
 				message: 'all todo already to use',
-				data: JSON.stringify({ todos: resultsAllTodo })
+				data: toJson(resultsAllTodo)
 			})
 		}
 	} catch (err) {
@@ -78,7 +79,7 @@ exports.initResultSubscriber = async () => {
 			await setResponsePublisher({
 				status: 200,
 				message: 'all todo already to use',
-				data: JSON.stringify({ todo: resultAllTodo })
+				data: toJson(resultAllTodo)
 			})
 		}
 	} catch (err) {
