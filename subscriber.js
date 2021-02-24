@@ -3,13 +3,10 @@ const { Subscriber } = require('./utils/util.subscriber')
 const { setResponsePublisher } = require('./utils/util.message')
 const { toJson } = require('./utils/util.parse')
 
-const createSubscriber = new Subscriber({ key: 'Create' })
-const resultSubscriber = new Subscriber({ key: 'Result' })
-
 exports.initCreateSubscriber = async () => {
+	const createSubscriber = new Subscriber({ key: 'Create' })
+	const { firstName, lastName } = await createSubscriber.getMap('create:speaker')
 	try {
-		const { firstName, lastName } = await createSubscriber.getMap('create:speaker')
-
 		const checkTodo = await todoModel.find({ $or: [{ firstName }, { lastName }] }).lean()
 
 		if (checkTodo.length > 0) {
@@ -65,9 +62,9 @@ exports.initResultsSubscriber = async () => {
 }
 
 exports.initResultSubscriber = async () => {
+	const resultSubscriber = new Subscriber({ key: 'Result' })
+	const { id } = await resultSubscriber.getMap('result:speaker')
 	try {
-		const { id } = await resultSubscriber.getMap('result:speaker')
-
 		const resultAllTodo = await todoModel.findById({ _id: id }).lean()
 
 		if (!resultAllTodo) {

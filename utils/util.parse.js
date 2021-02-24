@@ -3,6 +3,5 @@ exports.toJson = (data) => {
 }
 
 exports.toObject = (data) => {
-	console.log(data)
 	return JSON.parse(data).data
 }
