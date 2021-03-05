@@ -1,8 +1,8 @@
 const { Publisher } = require('./util.publisher')
 const { Subscriber } = require('./util.subscriber')
 
-exports.getResponseSubscriber = () => {
-	const getResponseSubscriber = new Subscriber({ key: 'Message' })
+exports.getListenerSubscriber = () => {
+	const getResponseSubscriber = new Subscriber({ key: 'Response' })
 	return new Promise((resolve, reject) => {
 		getResponseSubscriber
 			.getResponse()
@@ -11,10 +11,10 @@ exports.getResponseSubscriber = () => {
 	})
 }
 
-exports.setResponsePublisher = async (message) => {
-	const setResponsePublisher = new Publisher({ key: 'Message' })
-	if (message) {
-		await setResponsePublisher.setResponse({ ...message })
+exports.setSpeakerPublisher = async (response) => {
+	const setResponsePublisher = new Publisher({ key: 'Response' })
+	if (response) {
+		await setResponsePublisher.setResponse({ ...response })
 	} else {
 		await setResponsePublisher.setResponse({})
 	}

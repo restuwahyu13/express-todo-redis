@@ -1,13 +1,12 @@
 const { setCreatePublisher, setResultPublisher } = require('./publisher')
 const { initCreateSubscriber, initResultsSubscriber, initResultSubscriber } = require('./subscriber')
-const { getResponseSubscriber } = require('./utils/util.message')
-const { toObject } = require('./utils/util.parse')
+const { getListenerSubscriber } = require('./utils/util.response')
 
 exports.controller = {
 	async createController(req, res) {
 		await setCreatePublisher({ firstName: req.body.firstName, lastName: req.body.lastName })
 		await initCreateSubscriber()
-		const response = await getResponseSubscriber()
+		const response = await getListenerSubscriber()
 
 		if (response.status >= 400) {
 			return res.status(response.status).json({
@@ -24,7 +23,7 @@ exports.controller = {
 	},
 	async resultsController(req, res) {
 		await initResultsSubscriber()
-		const response = await getResponseSubscriber()
+		const response = await getListenerSubscriber()
 
 		if (response.status >= 400) {
 			return res.status(response.status).json({
@@ -37,13 +36,13 @@ exports.controller = {
 			method: req.method,
 			status: res.statusCode,
 			message: response.message,
-			todos: toObject(response.data)
+			todos: response.data
 		})
 	},
 	async resultController(req, res) {
 		await setResultPublisher({ id: req.params.id })
 		await initResultSubscriber()
-		const response = await getResponseSubscriber()
+		const response = await getListenerSubscriber()
 
 		if (response.status >= 400) {
 			return res.status(response.status).json({
@@ -56,7 +55,7 @@ exports.controller = {
 			method: req.method,
 			status: res.statusCode,
 			message: response.message,
-			todo: toObject(response.data)
+			todo: response.data
 		})
 	}
 }
